@@ -1382,7 +1382,7 @@ xcoff_link_add_symbols (bfd *abfd, struct bfd_link_info *info)
 	}
 
       name = _bfd_coff_internal_syment_name (abfd, &sym, buf);
-
+			
       if (name == NULL)
 	goto error_return;
 
@@ -1484,7 +1484,7 @@ xcoff_link_add_symbols (bfd *abfd, struct bfd_link_info *info)
       value = 0;
       set_toc = NULL;
 
-      switch (smtyp)
+			switch (smtyp)
 	{
 	default:
 	  _bfd_error_handler
@@ -1525,7 +1525,7 @@ xcoff_link_add_symbols (bfd *abfd, struct bfd_link_info *info)
 	  csect = NULL;
 	  csect_index = -(unsigned) 1;
 
-	  /* When we see a TOC anchor, we record the TOC value.  */
+		/* When we see a TOC anchor, we record the TOC value.  */
 	  if (aux.x_csect.x_smclas == XMC_TC0)
 	    {
 	      if (sym.n_sclass != C_HIDEXT
@@ -1944,12 +1944,12 @@ xcoff_link_add_symbols (bfd *abfd, struct bfd_link_info *info)
 
 	      if (*sym_hash == NULL)
 		goto error_return;
-	      if (((*sym_hash)->root.type == bfd_link_hash_defined
+		    if (((*sym_hash)->root.type == bfd_link_hash_defined
 		   || (*sym_hash)->root.type == bfd_link_hash_defweak)
 		  && ! bfd_is_und_section (section)
 		  && ! bfd_is_com_section (section))
 		{
-		  /* This is a second definition of a defined symbol.  */
+			/* This is a second definition of a defined symbol.  */
 		  if (((*sym_hash)->flags & XCOFF_DEF_REGULAR) == 0
 		      && ((*sym_hash)->flags & XCOFF_DEF_DYNAMIC) != 0)
 		    {
@@ -1970,7 +1970,7 @@ xcoff_link_add_symbols (bfd *abfd, struct bfd_link_info *info)
 		  else if (sym.n_sclass == C_AIX_WEAKEXT
 			   || (*sym_hash)->root.type == bfd_link_hash_defweak)
 		    {
-		      /* At least one of the definitions is weak.
+					/* At least one of the definitions is weak.
 			 Allow the normal rules to take effect.  */
 		    }
 		  else if ((*sym_hash)->root.u.undef.next != NULL
@@ -1982,7 +1982,7 @@ xcoff_link_add_symbols (bfd *abfd, struct bfd_link_info *info)
 			 above about the behaviour of the AIX linker.  */
 		    }
 		  else if ((*sym_hash)->smclas == aux.x_csect.x_smclas)
-		    {
+		    {			
 		      /* The symbols are both csects of the same
 			 class.  There is at least a chance that this
 			 is a semi-legitimate redefinition.  */
@@ -2025,6 +2025,7 @@ xcoff_link_add_symbols (bfd *abfd, struct bfd_link_info *info)
 	  BFD_ASSERT (last_real->next == first_csect);
 	  last_real->next = NULL;
 	  flags = (sym.n_sclass == C_EXT ? BSF_GLOBAL : BSF_WEAK);
+		if ((*sym_hash)->root.type == bfd_link_hash_undefweak) flags = BSF_WEAK;
 	  if (! (_bfd_generic_link_add_one_symbol
 		 (info, abfd, name, flags, section, value,
 		  NULL, copy, TRUE,
@@ -3357,7 +3358,7 @@ xcoff_build_ldsym (struct xcoff_loader_info *ldinfo,
       /* Give imported descriptors class XMC_DS rather than XMC_UA.  */
       if ((h->flags & XCOFF_DESCRIPTOR) != 0)
 	h->smclas = XMC_DS;
-      h->ldsym->l_ifile = h->ldindx;
+			h->ldsym->l_ifile = h->ldindx;
     }
 
   /* The first 3 symbol table indices are reserved to indicate the
@@ -4107,7 +4108,7 @@ xcoff_create_ldrel (bfd *output_bfd, struct xcoff_final_link_info *flinfo,
     ldrel.l_symndx = -(bfd_size_type) 1;
 
   ldrel.l_rtype = (irel->r_size << 8) | irel->r_type;
-  ldrel.l_rsecnm = output_section->target_index;
+	ldrel.l_rsecnm = output_section->target_index;
   bfd_xcoff_swap_ldrel_out (output_bfd, &ldrel, flinfo->ldrel);
   flinfo->ldrel += bfd_xcoff_ldrelsz (output_bfd);
   return TRUE;
@@ -5423,7 +5424,7 @@ xcoff_write_global_symbol (struct bfd_hash_entry *bh, void * inf)
 	  outsym += bfd_coff_symesz (output_bfd);
 
 	  /* Note : iraux is initialized above.  */
-	  bfd_coff_swap_aux_out (output_bfd, (void *) &iraux, T_NULL, C_HIDEXT,
+		bfd_coff_swap_aux_out (output_bfd, (void *) &iraux, T_NULL, C_HIDEXT,
 				 0, 1, (void *) outsym);
 	  outsym += bfd_coff_auxesz (output_bfd);
 
@@ -5661,7 +5662,7 @@ xcoff_write_global_symbol (struct bfd_hash_entry *bh, void * inf)
   outsym += bfd_coff_symesz (output_bfd);
 
   aux.x_csect.x_smclas = h->smclas;
-  bfd_coff_swap_aux_out (output_bfd, (void *) &aux, T_NULL, isym.n_sclass, 0, 1,
+	bfd_coff_swap_aux_out (output_bfd, (void *) &aux, T_NULL, isym.n_sclass, 0, 1,
 			 (void *) outsym);
   outsym += bfd_coff_auxesz (output_bfd);
 
@@ -5682,7 +5683,7 @@ xcoff_write_global_symbol (struct bfd_hash_entry *bh, void * inf)
 
       aux.x_csect.x_smtyp = XTY_LD;
       aux.x_csect.x_scnlen.l = obj_raw_syment_count (output_bfd);
-      bfd_coff_swap_aux_out (output_bfd, (void *) &aux, T_NULL, C_EXT, 0, 1,
+			bfd_coff_swap_aux_out (output_bfd, (void *) &aux, T_NULL, C_EXT, 0, 1,
 			     (void *) outsym);
       outsym += bfd_coff_auxesz (output_bfd);
     }
